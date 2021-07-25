@@ -1,21 +1,19 @@
-const express = require('express');
-const morgan = require('morgan');
-const app = express();
+var express = require('express');
+var morgan = require('morgan');
+var app = express();
 
-function commonmw(req, res, next) {
-  console.log('commonmw');
-  next(new Error('error ouccered'));
-}
+var users = [
+  {id: 1, name: 'alice'},
+  {id: 2, name: 'beck'},
+  {id: 3, name: 'chris'},
+];
 
-function errormw(err, req, res, next) {
-  console.log(err.message);
-  next();
-}
-
-app.use(commonmw);
-app.use(errormw);
 app.use(morgan('dev'));
 
-app.listen(3000, function() {
-  console.log('Server is running');
+app.get('/users', function(req, res) {
+  res.json(users);
 });
+
+app.listen(3000, function() {
+  console.log('Example app listening on port 3000!');
+})
