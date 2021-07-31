@@ -13,7 +13,7 @@
     "supertest": "6.1.4"
   },
   "scripts": {
-    "test": "mocha index.spec.js",
+    "test": "mocha index.spec.js -w",
     "start": "node index.js"
   },
   "author": "",
