@@ -1,8 +1,20 @@
 const app = require('../../index.js');
 const request = require('supertest');
 const should = require('should');
+const { User, sequelize } = require('../../models');
 
 describe('GET /users', () => {
+  const users = [
+    { name: 'alice' },
+    { name: 'beck' },
+    { name: 'chris' },
+  ]
+  before(() => {
+    return sequelize.sync({ force: true }); // create table
+  });
+  before(() => {
+    return User.bulkCreate(users);
+  });
   describe('성공시', () => {
     it('유저 객체를 담은 배열로 응답한다', (done) => { // done
       request(app)
@@ -52,11 +64,22 @@ describe('GET /users/:id', () => {
   it('id로 유저를 찾을 수 없을 경우 404으로 응답한다', (done) => {
     request(app)
       .get('/users/999')
-      .expect(400)
+      .expect(404)
       .end(done);
   });
 });
 describe('DELETE /users/:id', () => {
+  const users = [
+    { name: 'alice' },
+    { name: 'beck' },
+    { name: 'chris' },
+  ]
+  before(() => {
+    return sequelize.sync({ force: true }); // create table
+  });
+  before(() => {
+    return User.bulkCreate(users);
+  });
   describe('성공시', () => {
     it('204를 응답한다', (done) => {
       request(app)
@@ -75,6 +98,17 @@ describe('DELETE /users/:id', () => {
   });
 });
 describe('POST /users', () => {
+  const users = [
+    { name: 'alice' },
+    { name: 'beck' },
+    { name: 'chris' },
+  ]
+  before(() => {
+    return sequelize.sync({ force: true }); // create table
+  });
+  before(() => {
+    return User.bulkCreate(users);
+  });
   describe('성공시', () => {
     let name = 'daniel';
     let body;
@@ -111,10 +145,21 @@ describe('POST /users', () => {
         .send({ name: 'daniel' })
         .expect(409)
         .end(done);
-    })
+    });
   });
 });
 describe('PUT /users/:id', () => {
+  const users = [
+    { name: 'alice' },
+    { name: 'beck' },
+    { name: 'chris' },
+  ]
+  before(() => {
+    return sequelize.sync({ force: true }); // create table
+  });
+  before(() => {
+    return User.bulkCreate(users);
+  });
   describe('성공시', () => {
     it('변경된 name 을 반환한다', (done) => {
       const name = 'charlie';
